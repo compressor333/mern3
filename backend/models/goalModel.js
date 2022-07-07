@@ -2,9 +2,18 @@ const mongoose = require('mongoose')
 
 
 const goalSchema = mongoose.Schema({
-    text: {type: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User',
+
+
+    },
+
+    text: {
+        type: String,
            required: [true, 'Input text']
-    }
+    },
 }, {
     timestamps: true
 }
