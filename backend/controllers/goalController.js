@@ -1,9 +1,10 @@
-const getGoals = (req, res) => {
-    
-    res.status(200).json({'message': 'wiev message'})
-}
+const asyncHandler = require('express-async-handler')
 
-const createGoals = (req, res) => {
+const getGoals = asyncHandler(async (req, res) => {
+    res.status(200).json({'message': 'wiev message'})
+})
+
+const createGoals = asyncHandler(async (req, res) => {
     console.log(req.body);
     if(!req.body.text) {
         
@@ -11,15 +12,15 @@ const createGoals = (req, res) => {
         throw new Error ('input something')
     }
     res.status(200).json({message: 'create message'})
-}
+})
 
-const updateGoals = (req, res) => {
+const updateGoals = asyncHandler(async (req, res) => {
     res.status(200).json({message: `update message ${req.params.id}`})
-}
+})
 
-const deleteGoals = (req, res) => {
+const deleteGoals = asyncHandler(async (req, res) => {
     res.status(200).json({message: `delete message ${req.params.id}`})
-}
+})
 
 module.exports = {
     getGoals,
