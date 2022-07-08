@@ -1,6 +1,6 @@
 
 
-
+//вот это я вопще не пойму
 
 const errorHandler = (err, req, res, next) => {
     const statusCode = res.statusCode ? res.statusCode : 500

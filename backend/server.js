@@ -16,4 +16,4 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/endpoint', require('./routes/goalRoutes'))
 
 app.use(errorHandler)
-app.listen(port, () => console.log(`server running on port ${port}`))
+app.listen(port, () => console.log(`server running on port ${port}`.red))
