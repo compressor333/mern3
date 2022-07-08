@@ -13,7 +13,8 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.use('/endpoint', require('./routes/goalRoutes'))
+app.use('/api/goals', require('./routes/goalRoutes'))
+app.use('/api/users', require('./routes/userRoutes'))
 
 app.use(errorHandler)
 app.listen(port, () => console.log(`server running on port ${port}`.red))
