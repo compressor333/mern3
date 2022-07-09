@@ -4,17 +4,16 @@ const asyncHandler = require('express-async-handler')
 const User = require('../models/Usermodel')
 
 const registerUser = asyncHandler(async (req, res) => {
+    // vars ----->
     const {name, email, password} = req.body
 
     //fill checker
-
     if(!name || !email || !password) {
         res.status(400)
         throw new Error('fill all fields please')
     }
 
     //user exists checker
-
     const userExist = await User.findOne({email})
 
     if(userExist) {
@@ -37,7 +36,8 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(201).json({
         _id: user.id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        token: generateToken(user._id),
 
         })
     } else {
@@ -50,14 +50,15 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({email})
     if(user &&(await bcrypt.compare(password, user.password))) {
         res.json({
-            message: `Logged in as ${user.name}`
+            message: `Logged in as ${user.name}`,
+            token: generateToken(user._id),
+            _id: user.id,
         })
     } else {
         throw new Error('invalid credentials')
     }
     
 })
-
 
 
 const getMe = asyncHandler(async (req, res) => {
@@ -68,6 +69,12 @@ const watchUsers = asyncHandler(async (req, res) => {
     const users = await User.find()
     res.status(200).json(users)
 })
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+    })
+}
 
 module.exports = {
     registerUser,

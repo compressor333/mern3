@@ -27,7 +27,7 @@ const createGoals = asyncHandler(async (req, res) => {
     res.status(200).json(goal)
 })
 
-//finbyidandupdate(req.params.id, req.body, {new: true})
+//finbyidandupdate(req.params.id, req.body, {new: true} это перезаписать если есть    )
 
 const updateGoals = asyncHandler(async (req, res) => {
     const goal = await Goal.findById(req.params.id)
