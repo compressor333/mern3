@@ -1,11 +1,13 @@
 const asyncHandler = require('express-async-handler')
 
+
 const Goal = require('../models/goalModel')
+const User = require('../models/userModel')
 
 // get database - Goal.find and res.json(goals)
 
 const getGoals = asyncHandler(async (req, res) => {
-    const goals = await Goal.find()
+    const goals = await Goal.find({ user: req.user.id })
     res.status(200).json(goals)
 })
 
@@ -21,7 +23,8 @@ const createGoals = asyncHandler(async (req, res) => {
     }
 
     const goal = await Goal.create({
-        text: req.body.text
+        text: req.body.text,
+        user: req.user.id
 })
 
     res.status(200).json(goal)
@@ -29,8 +32,22 @@ const createGoals = asyncHandler(async (req, res) => {
 
 //finbyidandupdate(req.params.id, req.body, {new: true} это перезаписать если есть    )
 
+
+
 const updateGoals = asyncHandler(async (req, res) => {
-    const goal = await Goal.findById(req.params.id)
+    const user = await User.findById(req.user.id)
+    const goal = await Goal.findById(req.params.id )
+
+    if(!user) {
+        res.status(401)
+        throw new Error('user not found')
+    }
+
+    if(goal.user.toString() !== user.id ) {
+        res.status(401)
+        throw new Error('not authorised')
+    }
+
     if(!goal) {
     res.status(400)
     throw new Error('Goal not found')}
@@ -42,13 +59,27 @@ const updateGoals = asyncHandler(async (req, res) => {
 //find by id and delete(req.params.id)
 
 const deleteGoals = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user.id)
     const goal = await Goal.findById(req.params.id)
+
+    if(!user) {
+        res.status(401)
+        throw new Error('user not found')
+    }
+
+    if(goal.user.toString() !== user.id ) {
+        res.status(401)
+        throw new Error('not authorised')
+    }
+
     if(!goal) {
         res.status(400)
         throw new Error('Goal not found')}
         
-    const deletedGoal = await Goal.findByIdAndDelete(req.params.id)
-    res.status(200).json(deletedGoal)
+    await goal.remove()
+
+
+    res.status(200).json(`deleted ${goal.id}`)
 })
 
 module.exports = {
