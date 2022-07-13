@@ -30,7 +30,7 @@ function Register() {
                 <h1>
                     <FaUser /> Register
                 </h1>
-                <p>Please НАХУЙ!!!</p>
+                <p>Please create an account</p>
             </section>
             <section className="form">
                 <form>
