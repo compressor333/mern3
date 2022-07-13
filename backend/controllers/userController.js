@@ -76,6 +76,13 @@ const watchUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users)
 })
 
+const watchToken = asyncHandler(async (req, res) => {
+    const { email } = req.body
+    const user = await User.findOne({email})
+    token = await generateToken(user._id)
+    res.status(200).json(token)
+})
+
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '30d',
@@ -87,4 +94,5 @@ module.exports = {
     loginUser,
     getMe,
     watchUsers,
+    watchToken,
 }

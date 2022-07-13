@@ -15,7 +15,7 @@ const getGoals = asyncHandler(async (req, res) => {
 // create enrty Goal.create({text: req.body.text})
 
 const createGoals = asyncHandler(async (req, res) => {
-    console.log(req.body);
+    console.log(req.user);
     if(!req.body.text) {
         
         res.status(400)
